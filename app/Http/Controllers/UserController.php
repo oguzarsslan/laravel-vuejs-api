@@ -24,9 +24,9 @@ class UserController extends Controller
         $user->password = bcrypt($arg['password']);
         $user->save();
 
-        $token = $user->createToken('auth_token')->plainTextToken;
+//        $token = $user->createToken('auth_token')->plainTextToken;
 
-        return response()->json(['data' => $user, 'access_token' => $token, 'token_type' => 'Bearer']);
+        return response()->json(['data' => $user]);
     }
 
     public function delete(Request $request)
@@ -58,8 +58,6 @@ class UserController extends Controller
     {
         auth()->user()->tokens()->delete();
 
-        return [
-            'message' => 'You have successfully logged out and the token was successfully deleted'
-        ];
+        return response()->json(['message' => 'You have successfully logged out and the token was successfully deleted']);
     }
 }

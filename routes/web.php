@@ -22,8 +22,9 @@ use Illuminate\Http\Request;
 Route::post('/store', [UserController::class, 'store']);
 Route::post('/login', [UserController::class, 'login']);
 
+
 Route::group(['middleware' => ['auth:sanctum']], function () {
     Route::get('/get', [UserController::class, 'get']);
     Route::post('/delete', [UserController::class, 'delete']);
-    Route::post('/logout', [UserController::class, 'logout']);
+    Route::get('/logout', [UserController::class, 'logout']);
 });

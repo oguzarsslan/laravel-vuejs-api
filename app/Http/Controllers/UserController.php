@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Validator;
 
 class UserController extends Controller
 {
@@ -18,6 +19,16 @@ class UserController extends Controller
     {
         $arg = $request->only('email', 'password');
 
+        $rules = [
+            'email' => 'required|unique:users',
+            'password' => 'required'
+        ];
+
+        $validator = Validator::make($arg, $rules);
+
+        if ($validator->fails())
+            return response()->json(['error' => $validator->errors()->first()]);
+
         $user = new User();
         $user->name = 1;
         $user->email = $arg['email'];
@@ -26,7 +37,7 @@ class UserController extends Controller
 
 //        $token = $user->createToken('auth_token')->plainTextToken;
 
-        return response()->json(['data' => $user]);
+        return response()->json(['success' => 'success']);
     }
 
     public function delete(Request $request)

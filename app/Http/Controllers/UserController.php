@@ -21,13 +21,13 @@ class UserController extends Controller
 
         $rules = [
             'email' => 'required|unique:users',
-            'password' => 'required'
+            'password' => 'required|min:2|max:10'
         ];
 
         $validator = Validator::make($arg, $rules);
 
         if ($validator->fails())
-            return response()->json(['error' => $validator->errors()->first()]);
+            return response()->json($validator->errors()->first());
 
         $user = new User();
         $user->name = 1;
@@ -37,7 +37,7 @@ class UserController extends Controller
 
 //        $token = $user->createToken('auth_token')->plainTextToken;
 
-        return response()->json(['success' => 'success']);
+        return response()->json('Registration Successful');
     }
 
     public function delete(Request $request)
@@ -55,7 +55,7 @@ class UserController extends Controller
         $arg = $request->only('email', 'password');
 
         if (!auth()->attempt($arg)) {
-            return response('başarısız');
+            return response()->json("Failed Login");
         }
 
         $user = User::where('email', $request['email'])->firstOrFail();

@@ -71,4 +71,13 @@ class UserController extends Controller
 
         return response()->json(['message' => 'You have successfully logged out and the token was successfully deleted']);
     }
+
+    public function getUser()
+    {
+        $authUser = auth()->user();
+
+        $user = User::find($authUser);
+
+        return response()->json($user);
+    }
 }

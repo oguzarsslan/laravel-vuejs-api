@@ -80,4 +80,26 @@ class UserController extends Controller
 
         return response()->json($user);
     }
+
+    public function updateUser(Request $request)
+    {
+        $arg = $request->only('name', 'email', 'id');
+
+        $rules = [
+            'name' => 'required|min:2|max:10',
+            'email' => 'required'
+        ];
+
+        $validator = Validator::make($arg, $rules);
+
+        if ($validator->fails())
+            return response()->json($validator->errors()->first());
+
+        $user = User::find($arg['id']);
+        $user->name = $arg['name'];
+        $user->email = $arg['email'];
+        $user->save();
+
+        return response()->json($user);
+    }
 }

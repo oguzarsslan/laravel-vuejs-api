@@ -15,4 +15,9 @@ class Blog extends Model
         'category',
         'seen',
     ];
+
+    public function images()
+    {
+        return $this->hasMany(Image::class, 'blog_id');
+    }
 }

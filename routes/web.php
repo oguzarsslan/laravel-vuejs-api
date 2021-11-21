@@ -2,18 +2,7 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\UserController;
-use Illuminate\Http\Request;
-
-/*
-|--------------------------------------------------------------------------
-| Web Routes
-|--------------------------------------------------------------------------
-|
-| Here is where you can register web routes for your application. These
-| routes are loaded by the RouteServiceProvider within a group which
-| contains the "web" middleware group. Now create something great!
-|
-*/
+use App\Http\Controllers\BlogController;
 
 //Route::get('/', function () {
 //    return view('welcome');
@@ -28,4 +17,5 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
     Route::get('/logout', [UserController::class, 'logout']);
     Route::get('/getUser', [UserController::class, 'getUser']);
     Route::post('/updateUser', [UserController::class, 'updateUser']);
+    Route::post('/storeBlog', [BlogController::class, 'storeBlog']);
 });

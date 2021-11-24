@@ -30,18 +30,18 @@ class BlogController extends Controller
         $blog->category = $arg['category'];
         $blog->save();
 
-        if ($request->hasfile('images')) {
-            foreach ($request->file('images') as $image) {
-                $name = time() . rand(1, 100) . '.' . $image->extension();
-                $image->move(public_path('images'), $name);
+//        if ($request->hasfile('images')) {
+//            foreach ($request->file('images') as $image) {
+                $name = time() . rand(1, 100) . '.' . $request->file('images')->extension();
+                $request->file('images')->move(public_path('images'), $name);
 
                 $data = new Image();
                 $data->image = $name;
                 $data->blog_id = $blog->id;
                 $data->save();
-            }
-        }
+//            }
+//        }
 
-        return response()->json($request);
+        return response()->json($data);
     }
 }

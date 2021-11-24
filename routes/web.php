@@ -11,6 +11,7 @@ use App\Http\Controllers\BlogController;
 Route::post('/store', [UserController::class, 'store']);
 Route::post('/login', [UserController::class, 'login']);
 
+
 Route::group(['middleware' => ['auth:sanctum']], function () {
     Route::get('/get', [UserController::class, 'get']);
     Route::post('/delete', [UserController::class, 'delete']);

@@ -19,4 +19,5 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
     Route::get('/getUser', [UserController::class, 'getUser']);
     Route::post('/updateUser', [UserController::class, 'updateUser']);
     Route::post('/storeBlog', [BlogController::class, 'storeBlog']);
+    Route::get('/getBlogs', [BlogController::class, 'getBlogs']);
 });

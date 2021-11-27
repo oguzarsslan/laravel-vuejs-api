@@ -44,4 +44,13 @@ class BlogController extends Controller
 
         return response()->json($data);
     }
+
+    public function getBlogs()
+    {
+        $blogs = Blog::orderBy('created_at', 'desc')
+            ->with('Images')
+            ->get();
+
+        return response()->json($blogs);
+    }
 }

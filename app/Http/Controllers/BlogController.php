@@ -14,8 +14,8 @@ class BlogController extends Controller
         $arg = $request->only('title', 'body', 'category', 'images');
 
         $rules = [
-            'title' => 'required|min:2',
-            'body' => 'required|max:255',
+            'title' => 'required|min:5|max:20',
+            'body' => 'required|min:5|max:255',
             'category' => 'required'
         ];
 

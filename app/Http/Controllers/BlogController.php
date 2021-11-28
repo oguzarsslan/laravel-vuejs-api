@@ -53,4 +53,12 @@ class BlogController extends Controller
 
         return response()->json($blogs);
     }
+
+    public function getBlog($id)
+    {
+        $blog = Blog::with('Images')
+            ->find($id);
+
+        return response()->json($blog);
+    }
 }

@@ -76,9 +76,7 @@ class UserController extends Controller
     {
         $authUser = auth()->user();
 
-        $user = User::find($authUser);
-
-        return response()->json($user);
+        return response()->json($authUser);
     }
 
     public function updateUser(Request $request)
@@ -101,5 +99,10 @@ class UserController extends Controller
         $user->save();
 
         return response()->json($user);
+    }
+
+    public function friends(Request $request)
+    {
+        dd($request);
     }
 }

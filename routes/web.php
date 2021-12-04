@@ -3,6 +3,7 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\BlogController;
+use App\Http\Controllers\FriendController;
 
 //Route::get('/', function () {
 //    return view('welcome');
@@ -21,5 +22,14 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
     Route::post('/storeBlog', [BlogController::class, 'storeBlog']);
     Route::get('/getBlogs', [BlogController::class, 'getBlogs']);
     Route::get('/getBlog/{id}', [BlogController::class, 'getBlog']);
-    Route::post('/friends', [BlogController::class, 'friends']);
+
+    //friends
+    Route::post('/addFriend', [FriendController::class, 'addFriend']);
+    Route::post('/acceptFriend', [FriendController::class, 'acceptFriend']);
+    Route::post('/denyFriend', [FriendController::class, 'denyFriend']);
+    Route::post('/removeFriend', [FriendController::class, 'removeFriend']);
+    Route::post('/blockFriend', [FriendController::class, 'blockFriend']);
+    Route::post('/unblockFriend', [FriendController::class, 'unblockFriend']);
+    Route::get('/getFriends', [FriendController::class, 'getFriends']);
+
 });

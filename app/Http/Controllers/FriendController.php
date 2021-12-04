@@ -4,12 +4,10 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\User;
-use Illuminate\Support\Facades\Auth;
-use Multicaret\Acquaintances\Models\InteractionRelation;
 
 class FriendController extends Controller
 {
-    public function getFriends(Request $request)
+    public function getFriends()
     {
         $user = auth()->user();
         $friends = $user->getAcceptedFriendships();
@@ -18,7 +16,19 @@ class FriendController extends Controller
             $item['item'] = User::find($item['recipient_id']);
         }
 
-        return response($friends);
+        return response()->json($friends);
+    }
+
+    public function getRequest()
+    {
+        $user = auth()->user();
+        $friendRequest = $user->getPendingFriendships()->where('recipient_id', $user['id']);
+
+        foreach ($friendRequest as $item) {
+            $item['item'] = User::find($item['sender_id']);
+        }
+
+        return response()->json($friendRequest);
     }
 
     public function addFriend(Request $request)
@@ -34,7 +44,7 @@ class FriendController extends Controller
 
     public function acceptFriend(Request $request)
     {
-        $user = User::find(6);
+        $user = User::find(16);
         $sender = auth()->user();
 
         $user->acceptFriendRequest($sender);
@@ -54,8 +64,9 @@ class FriendController extends Controller
 
     public function removeFriend(Request $request)
     {
-        $user = User::find(1);
-        $friend = User::find(3);
+        $arg = $request->only('id');
+        $user = auth()->user();
+        $friend = User::find($arg['id']);
 
         $user->unfriend($friend);
 

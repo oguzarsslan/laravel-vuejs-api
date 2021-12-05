@@ -20,10 +20,12 @@ class UserController extends Controller
         foreach ($users as $item) {
             $a = $user->getFriendship($item);
 
-            if (isset($a['status']))
+            if (isset($a['status'])) {
                 $item['status'] = $a['status'];
+                $item['sender_id'] = $a['sender_id'];
+            }
         }
-
+        
         return response()->json($users);
     }
 

@@ -11,8 +11,20 @@ class UserController extends Controller
     public function get()
     {
         $users = User::all();
+        $user = auth()->user();
 
-        return response($users);
+//        foreach ($users as $item) {
+//           echo $item->getAllFriendships();
+//        }
+
+        foreach ($users as $item) {
+            $a = $user->getFriendship($item);
+
+            if (isset($a['status']))
+                $item['status'] = $a['status'];
+        }
+
+        return response()->json($users);
     }
 
     public function store(Request $request)

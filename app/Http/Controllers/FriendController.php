@@ -13,7 +13,11 @@ class FriendController extends Controller
         $friends = $user->getAcceptedFriendships();
 
         foreach ($friends as $item) {
-            $item['item'] = User::find($item['recipient_id']);
+            if ($item['sender_id'] == $user['id']) {
+                $item['item'] = User::find($item['recipient_id']);
+            } else {
+                $item['item'] = User::find($item['sender_id']);
+            }
         }
 
         return response()->json($friends);
@@ -31,11 +35,35 @@ class FriendController extends Controller
         return response()->json($friendRequest);
     }
 
+    public function getSent()
+    {
+        $user = auth()->user();
+        $friendRequest = $user->getPendingFriendships()->where('sender_id', $user['id']);
+
+        foreach ($friendRequest as $item) {
+            $item['item'] = User::find($item['recipient_id']);
+        }
+
+        return response()->json($friendRequest);
+    }
+
+    public function getBlocked()
+    {
+        $user = auth()->user();
+        $friendRequest = $user->getBlockedFriendships()->where('sender_id', $user['id']);
+
+        foreach ($friendRequest as $item) {
+            $item['item'] = User::find($item['recipient_id']);
+        }
+
+        return response()->json($friendRequest);
+    }
+
     public function addFriend(Request $request)
     {
 //        $user = auth()->user();
-        $user = User::find(12);
-        $recipient = User::find(1);
+        $user = User::find(1);
+        $recipient = User::find(43);
 
         $user->befriend($recipient);
 
@@ -44,22 +72,13 @@ class FriendController extends Controller
 
     public function acceptFriend(Request $request)
     {
-        $user = User::find(16);
-        $sender = auth()->user();
+        $arg = $request->only('id');
+        $user = auth()->user();
+        $sender = User::find($arg['id']);
 
         $user->acceptFriendRequest($sender);
 
         return response('accepted');
-    }
-
-    public function denyFriend(Request $request)
-    {
-        $user = User::find(3);
-        $sender = User::find(1);
-
-        $user->denyFriendRequest($sender);
-
-        return response('deny');
     }
 
     public function removeFriend(Request $request)
@@ -76,7 +95,7 @@ class FriendController extends Controller
     public function blockFriend(Request $request)
     {
         $user = User::find(1);
-        $friend = User::find(4);
+        $friend = User::find(14);
 
         $user->blockFriend($friend);
 
@@ -85,8 +104,9 @@ class FriendController extends Controller
 
     public function unblockFriend(Request $request)
     {
-        $user = User::find(1);
-        $friend = User::find(4);
+        $arg = $request->only('id');
+        $user = auth()->user();
+        $friend = User::find($arg['id']);
 
         $user->unblockFriend($friend);
 

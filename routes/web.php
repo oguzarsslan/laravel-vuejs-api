@@ -30,14 +30,13 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
     //friends
     Route::get('/getFriends', [FriendController::class, 'getFriends']);
     Route::get('/getRequest', [FriendController::class, 'getRequest']);
+    Route::get('/getSent', [FriendController::class, 'getSent']);
+    Route::get('/getBlocked', [FriendController::class, 'getBlocked']);
     Route::post('/removeFriend', [FriendController::class, 'removeFriend']);
-
-
-    Route::post('/addFriend', [FriendController::class, 'addFriend']);
     Route::post('/acceptFriend', [FriendController::class, 'acceptFriend']);
-    Route::post('/denyFriend', [FriendController::class, 'denyFriend']);
     Route::post('/blockFriend', [FriendController::class, 'blockFriend']);
     Route::post('/unblockFriend', [FriendController::class, 'unblockFriend']);
 
 
+    Route::post('/addFriend', [FriendController::class, 'addFriend']);
 });

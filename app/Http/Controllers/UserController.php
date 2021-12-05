@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Image;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
@@ -25,7 +26,7 @@ class UserController extends Controller
                 $item['sender_id'] = $a['sender_id'];
             }
         }
-        
+
         return response()->json($users);
     }
 
@@ -88,14 +89,15 @@ class UserController extends Controller
 
     public function getUser()
     {
-        $authUser = auth()->user();
+        $authUser = auth()->user()->with('Images')->first();
 
         return response()->json($authUser);
     }
 
     public function updateUser(Request $request)
     {
-        $arg = $request->only('name', 'email', 'id');
+        $arg = $request->only('name', 'email', 'image', 'id');
+        $id = $arg['id'];
 
         $rules = [
             'name' => 'required|min:2|max:10',
@@ -111,6 +113,23 @@ class UserController extends Controller
         $user->name = $arg['name'];
         $user->email = $arg['email'];
         $user->save();
+
+        if ($request->hasfile('image')) {
+            $name = time() . rand(1, 100) . '.' . $arg['image']->extension();
+            $arg['image']->move(public_path('images'), $name);
+
+            $data = Image::where('user_id', $arg['id'])->first();
+            if ($data == null) {
+                $data = new Image();
+                $data->image = $name;
+                $data->user_id = $arg['id'];
+                $data->save();
+            } else {
+                $data->image = $name;
+                $data->user_id = $arg['id'];
+                $data->update();
+            }
+        }
 
         return response()->json($user);
     }

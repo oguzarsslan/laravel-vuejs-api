@@ -61,9 +61,10 @@ class FriendController extends Controller
 
     public function addFriend(Request $request)
     {
-//        $user = auth()->user();
-        $user = User::find(1);
-        $recipient = User::find(43);
+        $arg = $request->only('id');
+
+        $user = auth()->user();
+        $recipient = User::find($arg['id']);
 
         $user->befriend($recipient);
 
@@ -94,8 +95,9 @@ class FriendController extends Controller
 
     public function blockFriend(Request $request)
     {
-        $user = User::find(1);
-        $friend = User::find(14);
+        $arg = $request->only('id');
+        $user = auth()->user();
+        $friend = User::find($arg['id']);
 
         $user->blockFriend($friend);
 

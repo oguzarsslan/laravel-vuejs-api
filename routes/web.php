@@ -36,7 +36,5 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
     Route::post('/acceptFriend', [FriendController::class, 'acceptFriend']);
     Route::post('/blockFriend', [FriendController::class, 'blockFriend']);
     Route::post('/unblockFriend', [FriendController::class, 'unblockFriend']);
-
-
     Route::post('/addFriend', [FriendController::class, 'addFriend']);
 });

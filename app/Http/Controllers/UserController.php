@@ -6,6 +6,7 @@ use App\Models\Image;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
+use Multicaret\Acquaintances\Models\Friendship;
 
 class UserController extends Controller
 {
@@ -61,6 +62,11 @@ class UserController extends Controller
 
         $user = User::find($arg['id']);
         $user->delete();
+
+        $friendRequest = Friendship::where('sender_id', $arg['id'])->orWhere('recipient_id', $arg['id'])->get();
+        foreach ($friendRequest as $item){
+            $item->delete();
+        }
 
         return response('kayıt silindi');
     }

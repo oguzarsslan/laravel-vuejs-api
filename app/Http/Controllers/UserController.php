@@ -25,6 +25,7 @@ class UserController extends Controller
             if (isset($a['status'])) {
                 $item['status'] = $a['status'];
                 $item['sender_id'] = $a['sender_id'];
+                $item['recipient_id'] = $a['recipient_id'];
             }
         }
 

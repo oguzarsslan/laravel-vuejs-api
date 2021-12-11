@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Image;
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
 use Multicaret\Acquaintances\Models\Friendship;
 
@@ -96,7 +97,9 @@ class UserController extends Controller
 
     public function getUser()
     {
-        $authUser = auth()->user()->with('Images')->first();
+        $authUserID = Auth::id();
+
+        $authUser = User::where('id', $authUserID)->with('images')->get();
 
         return response()->json($authUser);
     }
@@ -104,7 +107,6 @@ class UserController extends Controller
     public function updateUser(Request $request)
     {
         $arg = $request->only('name', 'email', 'image', 'id');
-        $id = $arg['id'];
 
         $rules = [
             'name' => 'required|min:2|max:10',

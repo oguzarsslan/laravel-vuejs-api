@@ -20,4 +20,9 @@ class Blog extends Model
     {
         return $this->hasMany(Image::class, 'blog_id');
     }
+
+    public function users()
+    {
+        return $this->belongsTo(User::class, 'user_id');
+    }
 }

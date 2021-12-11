@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Blog;
 use App\Models\Image;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
 
 class BlogController extends Controller
@@ -25,6 +26,7 @@ class BlogController extends Controller
             return response()->json($validator->errors()->first());
 
         $blog = new Blog();
+        $blog->user_id = Auth::id();
         $blog->title = $arg['title'];
         $blog->body = $arg['body'];
         $blog->category = $arg['category'];
@@ -50,6 +52,7 @@ class BlogController extends Controller
     {
         $blogs = Blog::orderBy('created_at', 'desc')
             ->with('Images')
+            ->with('users')
             ->get();
 
         return response()->json($blogs);
@@ -58,6 +61,7 @@ class BlogController extends Controller
     public function getBlog($id)
     {
         $blog = Blog::with('Images')
+            ->with('users')
             ->find($id);
         $blog->seen += 1;
         $blog->save();

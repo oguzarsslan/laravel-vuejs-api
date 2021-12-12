@@ -51,8 +51,7 @@ class BlogController extends Controller
     public function getBlogs()
     {
         $blogs = Blog::orderBy('created_at', 'desc')
-            ->with('Images')
-            ->with('users')
+            ->with('Images', 'users')
             ->get();
 
         return response()->json($blogs);
@@ -60,8 +59,7 @@ class BlogController extends Controller
 
     public function getBlog($id)
     {
-        $blog = Blog::with('Images')
-            ->with('users')
+        $blog = Blog::with('comments', 'users','Images')
             ->find($id);
         $blog->seen += 1;
         $blog->save();

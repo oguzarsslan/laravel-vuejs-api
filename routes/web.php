@@ -4,6 +4,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\BlogController;
 use App\Http\Controllers\FriendController;
+use App\Http\Controllers\CommentController;
 
 //Route::get('/', function () {
 //    return view('welcome');
@@ -29,6 +30,11 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
     Route::post('/updateBlog', [BlogController::class, 'updateBlog']);
     Route::post('/deleteBlog', [BlogController::class, 'deleteBlog']);
     Route::post('/deleteImage', [BlogController::class, 'deleteImage']);
+
+    //comment
+    Route::post('/setComment', [CommentController::class, 'setComment']);
+    Route::post('/upComment', [CommentController::class, 'upComment']);
+    Route::post('/deleteComment', [CommentController::class, 'deleteComment']);
 
     //friends
     Route::get('/getFriends', [FriendController::class, 'getFriends']);

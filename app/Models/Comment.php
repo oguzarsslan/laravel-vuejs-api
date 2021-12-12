@@ -14,4 +14,14 @@ class Comment extends Model
         'blog_id',
         'comment'
     ];
+
+    public function blogs()
+    {
+        return $this->belongsTo(Blog::class, 'blog_id');
+    }
+
+    public function users()
+    {
+        return $this->belongsTo(User::class, 'user_id');
+    }
 }

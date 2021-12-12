@@ -35,7 +35,7 @@ class UserController extends Controller
 
     public function store(Request $request)
     {
-        $arg = $request->only('email', 'password');
+        $arg = $request->only('name', 'email', 'password');
 
         $rules = [
             'email' => 'required|unique:users',
@@ -48,7 +48,7 @@ class UserController extends Controller
             return response()->json($validator->errors()->first());
 
         $user = new User();
-        $user->name = 1;
+        $user->name = $arg['name'];
         $user->email = $arg['email'];
         $user->password = bcrypt($arg['password']);
         $user->save();
@@ -99,7 +99,7 @@ class UserController extends Controller
     {
         $authUserID = Auth::id();
 
-        $authUser = User::where('id', $authUserID)->with('images')->get();
+        $authUser = User::where('id', $authUserID)->with('images', 'blogs', 'comments')->get();
 
         return response()->json($authUser);
     }

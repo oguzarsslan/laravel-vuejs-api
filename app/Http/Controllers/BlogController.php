@@ -6,6 +6,7 @@ use App\Models\Blog;
 use App\Models\Image;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
 
 class BlogController extends Controller
@@ -59,7 +60,7 @@ class BlogController extends Controller
 
     public function getBlog($id)
     {
-        $blog = Blog::with('comments', 'users','Images')
+        $blog = Blog::with('comments', 'users', 'Images')
             ->find($id);
         $blog->seen += 1;
         $blog->save();
@@ -125,4 +126,14 @@ class BlogController extends Controller
 
         return response('the picture was deleted');
     }
+
+//    public function test()
+//    {
+//        $blogs = DB::table('comments')
+//            ->join('users', 'users.id', 'comments.blog_id')
+//            ->join('blogs', 'users.id', 'blogs.user_id')
+//            ->get();
+//
+//        return response($blogs);
+//    }
 }

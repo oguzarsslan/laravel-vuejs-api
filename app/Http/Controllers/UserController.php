@@ -143,8 +143,32 @@ class UserController extends Controller
         return response()->json($user);
     }
 
-    public function friends(Request $request)
+    public function updatePassword(Request $request)
     {
-        dd($request);
+        $arg = $request->only('password', 'repassword');
+
+        $rules = [
+            'password' => 'required|min:2|max:10',
+            'repassword' => 'required|min:2|max:10|same:password'
+        ];
+
+        $validator = Validator::make($arg, $rules);
+
+        if ($validator->fails())
+            return response()->json($validator->errors()->first());
+
+        $user = User::find(Auth::id());
+        $user->password = bcrypt($arg['password']);
+        $user->save();
+
+        return response($user);
+    }
+
+    public function deleteProfilePhoto()
+    {
+        $photo = Image::where('user_id', Auth::id())->first();
+        $photo->delete();
+
+        return response('profile picture deleted');
     }
 }

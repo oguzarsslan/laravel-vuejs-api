@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Blog;
+use App\Models\Comment;
 use App\Models\Image;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -114,6 +115,9 @@ class BlogController extends Controller
 
         $image = Image::where('blog_id', $arg['id']);
         $image->delete();
+
+        $comment = Comment::where('blog_id', $arg['id']);
+        $comment->delete();
 
         return response('ok');
     }

@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\SoftDeletes;
 use Multicaret\Acquaintances\Traits\Friendable;
 use Multicaret\Acquaintances\Traits\CanFollow;
 use Multicaret\Acquaintances\Traits\CanBeFollowed;
@@ -21,6 +22,7 @@ class User extends Authenticatable
     use CanLike, CanBeLiked;
     use CanRate, CanBeRated;
     use HasApiTokens, HasFactory, Notifiable;
+    use SoftDeletes;
 
     /**
      * The attributes that are mass assignable.

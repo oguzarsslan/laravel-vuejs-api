@@ -13,7 +13,7 @@ class BlogController extends Controller
 {
     public function storeBlog(Request $request)
     {
-        $arg = $request->only('title', 'body', 'category', 'images');
+        $arg = $request->only('title', 'body', 'category', 'keywords', 'images');
 
         $rules = [
             'title' => 'required|min:5|max:20',
@@ -31,6 +31,7 @@ class BlogController extends Controller
         $blog->title = $arg['title'];
         $blog->body = $arg['body'];
         $blog->category = $arg['category'];
+        $blog->keywords = $arg['keywords'];
         $blog->seen = 0;
         $blog->save();
 

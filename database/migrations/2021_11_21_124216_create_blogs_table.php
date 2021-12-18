@@ -19,6 +19,7 @@ class CreateBlogsTable extends Migration
             $table->string('title');
             $table->longText('body');
             $table->string('category');
+            $table->longText('keywords');
             $table->string('seen')->nullable();
             $table->timestamps();
         });

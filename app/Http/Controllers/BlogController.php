@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Blog;
 use App\Models\Comment;
+use App\Models\Favorite;
 use App\Models\Image;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -48,13 +49,13 @@ class BlogController extends Controller
             }
         }
 
-        return response()->json($data);
+        return response()->json($blog);
     }
 
     public function getBlogs()
     {
         $blogs = Blog::orderBy('created_at', 'desc')
-            ->with('Images', 'users')
+            ->with('Images', 'users','favorites')
             ->get();
 
         return response()->json($blogs);
@@ -119,6 +120,9 @@ class BlogController extends Controller
         $comment = Comment::where('blog_id', $arg['id']);
         $comment->delete();
 
+        $favorite = Favorite::where('blog_id', $arg['id']);
+        $favorite->delete();
+
         return response('ok');
     }
 
@@ -132,6 +136,63 @@ class BlogController extends Controller
         return response('the picture was deleted');
     }
 
+//blogu favo tablosuyla cek
+    public function favorited(Request $request)
+    {
+        $arg = $request->only('id');
+        $userID = Auth::id();
+
+        $fav = Favorite::where('user_id', $userID)
+            ->where('blog_id', $arg['id'])
+            ->first();
+
+        if ($fav) {
+            $fav->user_id = $userID;
+            $fav->blog_id = $arg['id'];
+            $fav->favorite = 1;
+            $fav->save();
+        } else {
+            $blog = new Favorite();
+            $blog->user_id = $userID;
+            $blog->blog_id = $arg['id'];
+            $blog->favorite = 1;
+            $blog->save();
+        }
+
+        return response('favorited');
+    }
+
+    public function unfavorited(Request $request)
+    {
+        $arg = $request->only('id');
+        $userID = Auth::id();
+
+        $fav = Favorite::where('user_id', $userID)
+            ->where('blog_id', $arg['id'])
+            ->first();
+
+        if ($fav) {
+            $fav->user_id = $userID;
+            $fav->blog_id = $arg['id'];
+            $fav->favorite = 0;
+            $fav->save();
+        } else {
+            $blog = new Favorite();
+            $blog->user_id = $userID;
+            $blog->blog_id = $arg['id'];
+            $blog->favorite = 0;
+            $blog->save();
+        }
+
+        return response('unfavorited');
+    }
+
+    public function getFavorites()
+    {
+        $favorites = Favorite::with('users', 'blogs')->get();
+
+        return response($favorites);
+    }
 //    public function test()
 //    {
 //        $blogs = DB::table('comments')

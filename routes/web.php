@@ -34,6 +34,9 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
     Route::post('/updateBlog', [BlogController::class, 'updateBlog']);
     Route::post('/deleteBlog', [BlogController::class, 'deleteBlog']);
     Route::post('/deleteImage', [BlogController::class, 'deleteImage']);
+    Route::post('/favorited', [BlogController::class, 'favorited']);
+    Route::post('/unfavorited', [BlogController::class, 'unfavorited']);
+    Route::get('/getFavorites', [BlogController::class, 'getFavorites']);
 
     //comment
     Route::post('/setComment', [CommentController::class, 'setComment']);

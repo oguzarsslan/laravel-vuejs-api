@@ -2,6 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Blog;
+use App\Models\Comment;
+use App\Models\Favorite;
 use App\Models\Image;
 use App\Models\User;
 use Illuminate\Http\Request;
@@ -64,6 +67,18 @@ class UserController extends Controller
 
         $user = User::find($arg['id']);
         $user->delete();
+
+        $blog = Blog::where('user_id', $arg['id']);
+        $blog->delete();
+
+        $image = Image::where('user_id', $arg['id']);
+        $image->delete();
+
+        $comment = Comment::where('user_id', $arg['id']);
+        $comment->delete();
+
+        $favorite = Favorite::where('user_id', $arg['id']);
+        $favorite->delete();
 
         $friendRequest = Friendship::where('sender_id', $arg['id'])->orWhere('recipient_id', $arg['id'])->get();
         foreach ($friendRequest as $item){

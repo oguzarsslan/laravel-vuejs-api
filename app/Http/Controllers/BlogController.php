@@ -54,8 +54,11 @@ class BlogController extends Controller
 
     public function getBlogs()
     {
-        $blogs = Blog::orderBy('created_at', 'desc')
-            ->with('Images', 'users','favorites')
+        $blogs = Blog::with('Images', 'users')
+            ->with(array('favorites' => function ($query) {
+                $query->where('favorites.user_id', Auth::id());
+            }))
+            ->orderBy('created_at', 'desc')
             ->get();
 
         return response()->json($blogs);
@@ -63,7 +66,10 @@ class BlogController extends Controller
 
     public function getBlog($id)
     {
-        $blog = Blog::with('comments', 'users', 'Images')
+        $blog = Blog::with('users', 'Images')
+            ->with(array('comments' => function ($query) {
+                $query->orderBy('created_at', 'desc');
+            }))
             ->find($id);
         $blog->seen += 1;
         $blog->save();

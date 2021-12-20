@@ -32,13 +32,17 @@ class CommentController extends Controller
 
     public function upComment(Request $request)
     {
-        $arg = $request->only('id', 'comment');
+        $arg = $request->only('id', 'comment', 'comment_user_id', 'auth_id');
 
-        $comment = Comment::find($arg['id']);
-        $comment->comment = $arg['comment'];
-        $comment->save();
+        if ($arg['comment_user_id'] === $arg['auth_id']) {
+            $comment = Comment::find($arg['id']);
+            $comment->comment = $arg['comment'];
+            $comment->save();
 
-        return response($comment);
+            return response($comment);
+        } else {
+            return response(['err' => 'yetkiniz yok']);
+        }
     }
 
     public function deleteComment(Request $request)

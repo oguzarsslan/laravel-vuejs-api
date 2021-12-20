@@ -69,6 +69,7 @@ class BlogController extends Controller
         $blog = Blog::with('users', 'Images')
             ->with(array('comments' => function ($query) {
                 $query->orderBy('created_at', 'desc');
+                $query->with('users');
             }))
             ->find($id);
         $blog->seen += 1;

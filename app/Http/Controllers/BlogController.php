@@ -80,38 +80,42 @@ class BlogController extends Controller
 
     public function updateBlog(Request $request)
     {
-        $arg = $request->only('title', 'body', 'category', 'images', 'blogId');
+        $arg = $request->only('title', 'body', 'category', 'images', 'blogId', 'user_id');
 
-        $rules = [
-            'title' => 'required|min:5|max:20',
-            'body' => 'required|min:5|max:255',
-            'category' => 'required'
-        ];
+        if ($arg['user_id'] == Auth::id()) {
+            $rules = [
+                'title' => 'required|min:5|max:20',
+                'body' => 'required|min:5|max:255',
+                'category' => 'required'
+            ];
 
-        $validator = Validator::make($arg, $rules);
+            $validator = Validator::make($arg, $rules);
 
-        if ($validator->fails())
-            return response()->json($validator->errors()->first());
+            if ($validator->fails())
+                return response()->json($validator->errors()->first());
 
-        $blog = Blog::find($arg['blogId']);
-        $blog->title = $arg['title'];
-        $blog->body = $arg['body'];
-        $blog->category = $arg['category'];
-        $blog->save();
+            $blog = Blog::find($arg['blogId']);
+            $blog->title = $arg['title'];
+            $blog->body = $arg['body'];
+            $blog->category = $arg['category'];
+            $blog->save();
 
-        if ($request->hasfile('images')) {
-            foreach ($request->file('images') as $image) {
-                $name = time() . rand(1, 100) . '.' . $image->extension();
-                $image->move(public_path('images'), $name);
+            if ($request->hasfile('images')) {
+                foreach ($request->file('images') as $image) {
+                    $name = time() . rand(1, 100) . '.' . $image->extension();
+                    $image->move(public_path('images'), $name);
 
-                $data = new Image();
-                $data->image = $name;
-                $data->blog_id = $blog->id;
-                $data->save();
+                    $data = new Image();
+                    $data->image = $name;
+                    $data->blog_id = $blog->id;
+                    $data->save();
+                }
             }
-        }
 
-        return response()->json($blog);
+            return response()->json($blog);
+        } else {
+            return response()->json('yetkiniz yok');
+        }
     }
 
     public function deleteBlog(Request $request)

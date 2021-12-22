@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Comment;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
 
 class CommentController extends Controller
@@ -32,9 +33,9 @@ class CommentController extends Controller
 
     public function upComment(Request $request)
     {
-        $arg = $request->only('id', 'comment', 'comment_user_id', 'auth_id');
+        $arg = $request->only('id', 'comment', 'comment_user_id');
 
-        if ($arg['comment_user_id'] === $arg['auth_id']) {
+        if ($arg['comment_user_id'] == Auth::id()) {
             $comment = Comment::find($arg['id']);
             $comment->comment = $arg['comment'];
             $comment->save();

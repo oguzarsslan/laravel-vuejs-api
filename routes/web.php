@@ -15,7 +15,6 @@ Route::post('/login', [UserController::class, 'login']);
 
 //Route::get('/test', [BlogController::class, 'test']);
 
-
 Route::group(['middleware' => ['auth:sanctum']], function () {
 
     //user

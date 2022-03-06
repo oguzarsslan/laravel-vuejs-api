@@ -56,8 +56,6 @@ class UserController extends Controller
         $user->password = bcrypt($arg['password']);
         $user->save();
 
-//        $token = $user->createToken('auth_token')->plainTextToken;
-
         return response()->json('Registration Successful');
     }
 
